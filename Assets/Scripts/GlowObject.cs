@@ -4,7 +4,6 @@ using System.Collections.Generic;
 public class GlowObject : MonoBehaviour
 {
     public Color GlowColor;
-    public bool isGlowing = false;
     public float LerpFactor = 10;
 
     private PlayerController playerScript;
@@ -39,16 +38,17 @@ public class GlowObject : MonoBehaviour
 
     public void StartGlow()
     {
-        _targetColor = Color.blue;
+        print("starting glow");
+        //_targetColor = Color.blue;
         _targetColor = GlowColor;
         enabled = true;
     }
 
     public void EndGlow()
     {
+        print("ending glow");
         _targetColor = Color.black;
-        enabled = false;
-        isGlowing = false;
+        enabled = true;
     }
 
     /// <summary>
@@ -56,6 +56,7 @@ public class GlowObject : MonoBehaviour
     /// </summary>
     private void Update()
     {
+        
         _currentColor = Color.Lerp(_currentColor, _targetColor, Time.deltaTime * LerpFactor);
 
         for (int i = 0; i < _materials.Count; i++)

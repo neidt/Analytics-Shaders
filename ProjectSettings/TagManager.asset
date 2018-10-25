@@ -6,6 +6,7 @@ TagManager:
   tags:
   - EyeMount
   - Pickup
+  - Spawner
   layers:
   - Default
   - TransparentFX

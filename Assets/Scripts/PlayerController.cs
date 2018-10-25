@@ -15,6 +15,7 @@ public class PlayerController : MonoBehaviour
 
     private Transform eyeMount;
     private CharacterController characterController;
+    private SpawnerScript spawnerThing;
 
     public LayerMask raycastLayers;
     public LayerMask PickupOnly;
@@ -27,6 +28,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         characterController = GetComponent<CharacterController>();
+        spawnerThing = GameObject.FindGameObjectWithTag("Spawner").GetComponent<SpawnerScript>();
 
         eyeMount = transform.Find("EyeMount");
 
@@ -77,37 +79,34 @@ public class PlayerController : MonoBehaviour
     {
         obj.SetActive(false);
         pickupCount++;
+        spawnerThing.objectsCollected++;
     }
 
     public void CheckForObject()
     {
-        RaycastHit hitInfo;
-        if (Physics.Raycast(transform.position, transform.forward, out hitInfo, rayDistance, raycastLayers.value))
-        {
-            print("raycast hit" + hitInfo.transform.name + " at" + hitInfo.point);
-            isHittingObj = true;
-            GameObject hitInfoObj = hitInfo.transform.gameObject;
+        isHittingObj = false;
 
-            if (hitInfoObj.GetComponent<GlowObject>().isGlowing == false && isHittingObj == true)
+        RaycastHit hitInfo;
+        bool isRayHitting = Physics.Raycast(transform.position, transform.forward,
+            out hitInfo, rayDistance, raycastLayers.value);
+        
+        if (isRayHitting)
+        {
+            GameObject hitInfoObj = hitInfo.transform.gameObject;
+            GlowObject glowScript = hitInfoObj.GetComponent<GlowObject>();
+            print("raycast hit " + hitInfo.transform.name + " at " + hitInfo.point);
+
+            isHittingObj = true;
+
+            if (isHittingObj == true)
             {
-                hitInfoObj.GetComponent<GlowObject>().StartGlow();
-            }
-            else
-            {
-                hitInfoObj.GetComponent<GlowObject>().EndGlow();
+                glowScript.StartGlow();
             }
 
             if (hitInfo.transform.tag == "Pickup" && Input.GetKeyDown(KeyCode.Space))
             {
-                hitInfoObj.GetComponent<GlowObject>().isGlowing = false;
-                hitInfoObj.GetComponent<GlowObject>().EndGlow();
                 CollectObject(hitInfoObj);
             }
-        }/*
-        else if(!Physics.Raycast(transform.position, transform.forward, out hitInfo, rayDistance, raycastLayers.value))
-        {
-            isHittingObj = false;
-        }*/
-        
+        }
     }
 }

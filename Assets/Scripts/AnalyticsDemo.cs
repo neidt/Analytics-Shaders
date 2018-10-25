@@ -16,7 +16,7 @@ public class AnalyticsDemo : MonoBehaviour
 
         AnalyticsEvent.Custom("custom_demo_event", additionalData);
 
-        AnalyticsEvent.Custom("obj_found_level1_obj1");
+        AnalyticsEvent.Custom("obj_found_level1_obj");
 
 
         //alternatively
