@@ -86,17 +86,28 @@ public class PlayerController : MonoBehaviour
         {
             print("raycast hit" + hitInfo.transform.name + " at" + hitInfo.point);
             isHittingObj = true;
+            GameObject hitInfoObj = hitInfo.transform.gameObject;
+
+            if (hitInfoObj.GetComponent<GlowObject>().isGlowing == false && isHittingObj == true)
+            {
+                hitInfoObj.GetComponent<GlowObject>().StartGlow();
+            }
+            else
+            {
+                hitInfoObj.GetComponent<GlowObject>().EndGlow();
+            }
 
             if (hitInfo.transform.tag == "Pickup" && Input.GetKeyDown(KeyCode.Space))
             {
-                GameObject hitInfoObj = hitInfo.transform.gameObject;
-                if (hitInfoObj.GetComponent<GlowObject>().isGlowing == true)
-                {
-                    hitInfoObj.GetComponent<GlowObject>().GlowColor = Color.blue;
-                }
-
+                hitInfoObj.GetComponent<GlowObject>().isGlowing = false;
+                hitInfoObj.GetComponent<GlowObject>().EndGlow();
                 CollectObject(hitInfoObj);
             }
-        }
+        }/*
+        else if(!Physics.Raycast(transform.position, transform.forward, out hitInfo, rayDistance, raycastLayers.value))
+        {
+            isHittingObj = false;
+        }*/
+        
     }
 }

@@ -37,17 +37,17 @@ public class GlowObject : MonoBehaviour
         }
     }
 
-    private void OnMouseEnter()
+    public void StartGlow()
     {
-        if (playerScript.isHittingObj) { _targetColor = Color.blue; }
+        _targetColor = Color.blue;
         _targetColor = GlowColor;
         enabled = true;
     }
 
-    private void OnMouseExit()
+    public void EndGlow()
     {
         _targetColor = Color.black;
-        enabled = true;
+        enabled = false;
         isGlowing = false;
     }
 
