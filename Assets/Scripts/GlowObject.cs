@@ -38,7 +38,7 @@ public class GlowObject : MonoBehaviour
 
     public void StartGlow()
     {
-        print("starting glow");
+        //print("starting glow");
         //_targetColor = Color.blue;
         _targetColor = GlowColor;
         enabled = true;

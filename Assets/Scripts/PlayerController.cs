@@ -6,20 +6,28 @@ public class PlayerController : MonoBehaviour
 {
     public float speed;
     public float runMultiplier;
+
     private bool isRunning = false;
     private float MAXSPEED;
     private float BASESPEED;
+
     public float rotateFactor = 500.0f;
     public float pitchFactor = 500.0f;
     public int pickupCount = 0;
 
+    public float detectionDistance = 4.0f;
+    private Vector3 playerVec;
+    private Vector3 targetVec;
+
     private Transform eyeMount;
     private CharacterController characterController;
     private SpawnerScript spawnerThing;
+    private Camera mainCam;
 
     public LayerMask raycastLayers;
     public LayerMask PickupOnly;
-    public bool isHittingObj = false;
+    public LayerMask Objects;
+    public bool isHittingPickup = false;
 
     public float rayDistance = 3.0f;
 
@@ -29,7 +37,7 @@ public class PlayerController : MonoBehaviour
     {
         characterController = GetComponent<CharacterController>();
         spawnerThing = GameObject.FindGameObjectWithTag("Spawner").GetComponent<SpawnerScript>();
-
+        mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         eyeMount = transform.Find("EyeMount");
 
         speed = 10;
@@ -84,29 +92,40 @@ public class PlayerController : MonoBehaviour
 
     public void CheckForObject()
     {
-        isHittingObj = false;
+        isHittingPickup = false;
 
         RaycastHit hitInfo;
-        bool isRayHitting = Physics.Raycast(transform.position, transform.forward,
-            out hitInfo, rayDistance, raycastLayers.value);
-        
+        bool isRayHitting = Physics.Raycast(transform.position, transform.forward, out hitInfo, rayDistance, raycastLayers.value);
+
         if (isRayHitting)
         {
             GameObject hitInfoObj = hitInfo.transform.gameObject;
             GlowObject glowScript = hitInfoObj.GetComponent<GlowObject>();
-            print("raycast hit " + hitInfo.transform.name + " at " + hitInfo.point);
 
-            isHittingObj = true;
-
-            if (isHittingObj == true)
+            if (/*Vector3.Distance(playerVec, hitInfo.point) < detectionDistance &&*/ hitInfo.transform.gameObject.GetComponent<Renderer>().IsVisibleFrom(mainCam))
             {
-                glowScript.StartGlow();
-            }
+                print("in range and in view, starting glow");
+                isHittingPickup = true;
+                hitInfo.transform.gameObject.GetComponent<GlowObject>().StartGlow();
 
-            if (hitInfo.transform.tag == "Pickup" && Input.GetKeyDown(KeyCode.Space))
-            {
-                CollectObject(hitInfoObj);
+                if (Input.GetKeyDown(KeyCode.Space) && hitInfo.transform.gameObject.tag == "Pickup")
+                {
+                    CollectObject(hitInfoObj);
+                }
             }
         }
+        else
+        {
+            isHittingPickup = false;
+            if (Vector3.Distance(playerVec, hitInfo.point) > detectionDistance && !isHittingPickup)
+            {
+                print("in view, not hitting obj, ending glow");
+                isHittingPickup = false;
+                hitInfo.transform.gameObject.GetComponent<GlowObject>().EndGlow();
+            }
+        }
+
+
+
     }
 }

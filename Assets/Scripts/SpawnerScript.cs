@@ -22,25 +22,20 @@ public class SpawnerScript : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        //randRangeXMin = -ground.localScale.x;
-        //randRangeYMin = -ground.localScale.y;
-        //groundWidth = ground.localScale.x;
-        //groundLength = ground.localScale.y;
-
         for (totalObjCount = 0; totalObjCount < maxNumObjects; totalObjCount++)
         {
             if (Random.Range(0,2) == 0)
             {
-                print("making pickup at " +MakeSpotVec().ToString());
+                //print("making pickup at " +MakeSpotVec().ToString());
                 Instantiate(pickupObj, MakeSpotVec(), MakeSpotQuat());
                 totPickupCount++;
             }
             else
             {
-                print("making regular object at: " + MakeSpotVec().ToString());
+                //print("making regular object at: " + MakeSpotVec().ToString());
                 Instantiate(regularObj, MakeSpotVec(), MakeSpotQuat());
             }
-            print("total objects is: " + totalObjCount.ToString());
+            //print("total objects is: " + totalObjCount.ToString());
         }
     }
 
