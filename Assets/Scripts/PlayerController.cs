@@ -113,7 +113,8 @@ public class PlayerController : MonoBehaviour
                     CollectObject(hitInfoObj);
                 }
             }
-        }
+        }/*
+        hitInfo.transform.gameObject.GetComponent<GlowObject>().EndGlow();
         else
         {
             isHittingPickup = false;
@@ -123,7 +124,7 @@ public class PlayerController : MonoBehaviour
                 isHittingPickup = false;
                 hitInfo.transform.gameObject.GetComponent<GlowObject>().EndGlow();
             }
-        }
+        }*/
 
 
 
