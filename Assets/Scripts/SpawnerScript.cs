@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class SpawnerScript : MonoBehaviour
 {
@@ -17,7 +18,6 @@ public class SpawnerScript : MonoBehaviour
     float rotX, rotY, rotZ;
     public int maxNumObjects = 10;
     int totalObjCount;
-    
 
     // Use this for initialization
     void Start()
@@ -37,7 +37,10 @@ public class SpawnerScript : MonoBehaviour
             }
             //print("total objects is: " + totalObjCount.ToString());
         }
+        
     }
+
+    
 
     Vector3 MakeSpotVec()
     {
@@ -63,7 +66,7 @@ public class SpawnerScript : MonoBehaviour
     {
         if(objectsCollected == totPickupCount)
         {
-            //do the end thing
+            GameObject.FindGameObjectWithTag("WinnerWinnerChickenDinner").GetComponent<Text>().text = "Winner Winner Chicken Dinner";
         }
     }
 }
