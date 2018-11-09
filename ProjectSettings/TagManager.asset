@@ -9,6 +9,7 @@ TagManager:
   - Spawner
   - Boulder
   - WinnerWinnerChickenDinner
+  - Ground
   layers:
   - Default
   - TransparentFX
