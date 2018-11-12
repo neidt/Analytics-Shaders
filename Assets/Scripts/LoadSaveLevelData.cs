@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using System.Text;
+using System.IO;
 
 public class LoadSaveLevelData : MonoBehaviour
 {
@@ -37,7 +38,7 @@ public class LoadSaveLevelData : MonoBehaviour
     {
         if (saveLevel)
         {
-            SaveLevel(txtLevelName.text);
+           SaveLevel(txtLevelName.text);
         }
 
 
@@ -55,6 +56,12 @@ public class LoadSaveLevelData : MonoBehaviour
             GameObject.Instantiate(objectTemplate, Vector3.zero, Quaternion.identity);
         }
 
+        //make an obstacle
+        if (Input.GetKeyDown(KeyCode.Alpha3))
+        {
+            GameObject.Instantiate(obstacleTemplate, Vector3.zero, Quaternion.identity);
+        }
+
         RaycastHit rayhit;
         if (Input.GetMouseButtonDown(0))
         {
@@ -69,6 +76,13 @@ public class LoadSaveLevelData : MonoBehaviour
                     camMove.enabled = false;
                     simpleMove.enabled = true;
                 }
+                if(rayhit.transform.tag == "Obstacle")
+                {
+                    simpleMove = rayhit.transform.gameObject.GetComponent<SimpleMover>() as SimpleMover;
+
+                    camMove.enabled = false;
+                    simpleMove.enabled = true;
+                }
                 if (rayhit.transform.tag == "Ground" || rayhit.transform.tag == "Untagged")
                 {
                     simpleMove.enabled = false;
@@ -80,11 +94,10 @@ public class LoadSaveLevelData : MonoBehaviour
 
     }
 
-    private void SaveLevel(string levelName)
+    public void SaveLevel(string levelName)
     {
         LevelData level = new LevelData();
-        //levelData.movingSpheres = new List<MovingSphereData>();
-
+        
         //level.SetLevelName(editingController.levelName);
 
         //ground
@@ -108,8 +121,7 @@ public class LoadSaveLevelData : MonoBehaviour
             level.pickupList.Add(newPickup);
         }
 
-
-        //other stuffs spheres
+        //other stuffs
         foreach (GameObject objectBoulder in GameObject.FindGameObjectsWithTag("Boulder"))
         {
             NonPickupData currentObject = new NonPickupData();
@@ -118,6 +130,7 @@ public class LoadSaveLevelData : MonoBehaviour
 
             levelData.objectList.Add(currentObject);
         }
+
         level.SaveToFile(levelName + ".lvl");
     }//end savelevel
 
@@ -162,6 +175,7 @@ public class LevelData
     public Ground groundPlane = new Ground();
     public List<PickupData> pickupList = new List<PickupData>();
     public List<NonPickupData> objectList = new List<NonPickupData>();
+    private static string saveDirectory = Directory.GetCurrentDirectory() + "/CustomLevel/";
 
     #region get/set methods for the level data itself
     public string GetLevelName()
@@ -177,12 +191,12 @@ public class LevelData
     #region save and load levelData functions
     public static LevelData LoadFromFile(string fileName)
     {
-        return JsonUtility.FromJson<LevelData>(System.IO.File.ReadAllText(fileName));
+        return JsonUtility.FromJson<LevelData>(System.IO.File.ReadAllText(saveDirectory + fileName));
     }//end loadfromfile
 
     public void SaveToFile(string fileName)
     {
-        System.IO.File.WriteAllText(fileName, JsonUtility.ToJson(this, true));
+        System.IO.File.WriteAllText(saveDirectory + fileName, JsonUtility.ToJson(this, true));
     }//end savetofile
     #endregion
 }

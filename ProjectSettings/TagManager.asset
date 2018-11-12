@@ -11,6 +11,7 @@ TagManager:
   - WinnerWinnerChickenDinner
   - Ground
   - CameraMount
+  - Obstacle
   layers:
   - Default
   - TransparentFX

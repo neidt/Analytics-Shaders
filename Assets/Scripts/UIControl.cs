@@ -6,20 +6,19 @@ using UnityEngine.SceneManagement;
 
 public class UIControl : MonoBehaviour
 {
-    public Text txtLevelName;
-    private EditingController editController;
+    public InputField txtLevelName;
+    public EditingController editController;
 
     // Use this for initialization
     void Start()
     {
-        editController = GameObject.Find("GameController").GetComponent<EditingController>();
+        editController = GameObject.FindGameObjectWithTag("GameController").GetComponent<EditingController>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        txtLevelName.text = editController.levelName;
-
+        editController.levelName = txtLevelName.text;
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {

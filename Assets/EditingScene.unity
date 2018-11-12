@@ -706,7 +706,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 62eadda67e6ab8d4ab944819d93cd3c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  obstacleTemplate: {fileID: 1329321476185540, guid: 1e4a17d599f6dc74ba27fa8043ffaa4a,
+  obstacleTemplate: {fileID: 1343368800966760, guid: c6414b228ab96a34cbdc7cab6b7fb6ce,
     type: 2}
   pickupTemplate: {fileID: 1696754238301800, guid: b5e2d3caafe887b4bb3fbfc84aa51673,
     type: 2}
@@ -908,12 +908,12 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 775114628}
-        m_MethodName: 
-        m_Mode: 1
+      - m_Target: {fileID: 775114631}
+        m_MethodName: SaveLevel
+        m_Mode: 5
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
@@ -1238,6 +1238,8 @@ MonoBehaviour:
     m_VerticalOverflow: 1
     m_LineSpacing: 1
   m_Text: '1 for pickup, 2 for nonpickup
+
+    3 for an obstacle
 
     Click on object to enable editing
 
