@@ -10,6 +10,7 @@ TagManager:
   - Boulder
   - WinnerWinnerChickenDinner
   - Ground
+  - CameraMount
   layers:
   - Default
   - TransparentFX

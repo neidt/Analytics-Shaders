@@ -18,14 +18,18 @@ public class LoadSaveLevelData : MonoBehaviour
     public Toggle toggleMovePlace;
     //public Toggle togglePickupObstacle;
 
-    public CameraMove cam;
+    private SimpleMover simpleMove;
+
+    private CameraMove camMove;
 
     private EditingController editingController;
 
     // Use this for initialization
     void Start()
     {
-        editingController = GameObject.Find("GameController").GetComponent<EditingController>();
+        camMove = GameObject.FindGameObjectWithTag("CameraMount").GetComponent<CameraMove>() as CameraMove;
+        editingController = GameObject.FindGameObjectWithTag("GameController").GetComponent<EditingController>();
+
     }
 
     // Update is called once per frame
@@ -36,21 +40,44 @@ public class LoadSaveLevelData : MonoBehaviour
             SaveLevel(txtLevelName.text);
         }
 
-        if (toggleMovePlace.isOn)
-        {
-            cam.enabled = true;
-            //spawn glowy object
-            if (Input.GetKeyDown(KeyCode.G))
-            {
-                GameObject.Instantiate(pickupTemplate, Vector3.zero, Quaternion.identity);
-            }
 
-            //make not a pickup
-            if (Input.GetKeyDown(KeyCode.H))
+        //cam.enabled = true;
+        //spawn glowy object
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            GameObject.Instantiate(pickupTemplate, Vector3.zero, Quaternion.identity);
+
+        }
+
+        //make not a pickup
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            GameObject.Instantiate(objectTemplate, Vector3.zero, Quaternion.identity);
+        }
+
+        RaycastHit rayhit;
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out rayhit))
             {
-                GameObject.Instantiate(objectTemplate, Vector3.zero, Quaternion.identity);
+                #region object movement, scaling, rotation
+                if (rayhit.transform.tag == "Pickup"|| rayhit.transform.tag == "Boulder")
+                {
+                    print("Hitting object");
+                    simpleMove = rayhit.transform.gameObject.GetComponent<SimpleMover>() as SimpleMover;
+                    
+                    camMove.enabled = false;
+                    simpleMove.enabled = true;
+                }
+                if (rayhit.transform.tag == "Ground" || rayhit.transform.tag == "Untagged")
+                {
+                    simpleMove.enabled = false;
+                    camMove.enabled = true;
+                }
+                #endregion
             }
         }
+
     }
 
     private void SaveLevel(string levelName)
@@ -58,7 +85,7 @@ public class LoadSaveLevelData : MonoBehaviour
         LevelData level = new LevelData();
         //levelData.movingSpheres = new List<MovingSphereData>();
 
-        level.SetLevelName(editingController.levelName);
+        //level.SetLevelName(editingController.levelName);
 
         //ground
         Transform groundPlane = GameObject.FindGameObjectWithTag("Ground").GetComponent<Transform>();
