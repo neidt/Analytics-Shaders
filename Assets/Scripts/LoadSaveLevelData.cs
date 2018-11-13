@@ -5,6 +5,8 @@ using UnityEngine.UI;
 using System;
 using System.Text;
 using System.IO;
+using UnityEngine.SceneManagement;
+using UnityEditor.SceneManagement;
 
 public class LoadSaveLevelData : MonoBehaviour
 {
@@ -32,7 +34,6 @@ public class LoadSaveLevelData : MonoBehaviour
         editingController = GameObject.FindGameObjectWithTag("GameController").GetComponent<EditingController>();
 
     }
-
     // Update is called once per frame
     void Update()
     {
@@ -91,14 +92,14 @@ public class LoadSaveLevelData : MonoBehaviour
                 #endregion
             }
         }
-
     }
+    
 
     public void SaveLevel(string levelName)
     {
         LevelData level = new LevelData();
         
-        //level.SetLevelName(editingController.levelName);
+        level.SetLevelName(editingController.levelName);
 
         //ground
         Transform groundPlane = GameObject.FindGameObjectWithTag("Ground").GetComponent<Transform>();
@@ -120,7 +121,6 @@ public class LoadSaveLevelData : MonoBehaviour
 
             level.pickupList.Add(newPickup);
         }
-
         //other stuffs
         foreach (GameObject objectBoulder in GameObject.FindGameObjectsWithTag("Boulder"))
         {
@@ -130,8 +130,8 @@ public class LoadSaveLevelData : MonoBehaviour
 
             levelData.objectList.Add(currentObject);
         }
-
-        level.SaveToFile(levelName + ".lvl");
+        level.SaveToFile(levelName + ".unity");
+        
     }//end savelevel
 
 }
@@ -175,7 +175,7 @@ public class LevelData
     public Ground groundPlane = new Ground();
     public List<PickupData> pickupList = new List<PickupData>();
     public List<NonPickupData> objectList = new List<NonPickupData>();
-    private static string saveDirectory = Directory.GetCurrentDirectory() + "/CustomLevel/";
+    private static string saveDirectory = Directory.GetCurrentDirectory() + "\\CustomLevel\\";
 
     #region get/set methods for the level data itself
     public string GetLevelName()
@@ -191,12 +191,16 @@ public class LevelData
     #region save and load levelData functions
     public static LevelData LoadFromFile(string fileName)
     {
-        return JsonUtility.FromJson<LevelData>(System.IO.File.ReadAllText(saveDirectory + fileName));
+        string newPath = System.IO.Path.Combine(saveDirectory, fileName);
+        return JsonUtility.FromJson<LevelData>(System.IO.File.ReadAllText(newPath));
     }//end loadfromfile
 
     public void SaveToFile(string fileName)
     {
-        System.IO.File.WriteAllText(saveDirectory + fileName, JsonUtility.ToJson(this, true));
+        string newPath = System.IO.Path.Combine(saveDirectory, fileName);
+        System.IO.File.WriteAllText(newPath, JsonUtility.ToJson(this, true));
+       
+        
     }//end savetofile
     #endregion
 }

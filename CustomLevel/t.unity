@@ -1,0 +1,11 @@
+{
+    "levelName": "",
+    "groundPlane": {
+        "width": 1.0,
+        "height": 1.0,
+        "xScale": 1.0,
+        "yScale": 1.0
+    },
+    "pickupList": [],
+    "objectList": []
+}

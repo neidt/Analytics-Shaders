@@ -12,6 +12,7 @@ public class UIControl : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        DontDestroyOnLoad(this.gameObject);
         editController = GameObject.FindGameObjectWithTag("GameController").GetComponent<EditingController>();
     }
 
@@ -35,7 +36,8 @@ public class UIControl : MonoBehaviour
     public void btnLoadLevel(string levelToLoad)
     {
         //load the data based on its coresponding input box value
-
-        LevelData.LoadFromFile(levelToLoad);
+        //Scene newScene = UnityEngine.SceneManagement.SceneManager.GetSceneByPath(levelToLoad);
+        LevelData.LoadFromFile(levelToLoad + ".unity");
+        //SceneManager.LoadScene(4);
     }
 }
