@@ -19,6 +19,7 @@ public class UIControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         editController.levelName = txtLevelName.text;
 
         if (Input.GetKeyDown(KeyCode.Escape))

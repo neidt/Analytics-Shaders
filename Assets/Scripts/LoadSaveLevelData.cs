@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using System;
 using System.Text;
 using System.IO;
+using System.Runtime.Serialization.Formatters.Binary;
 using UnityEngine.SceneManagement;
 using UnityEditor.SceneManagement;
 
@@ -39,7 +40,7 @@ public class LoadSaveLevelData : MonoBehaviour
     {
         if (saveLevel)
         {
-           SaveLevel(txtLevelName.text);
+            SaveLevel(txtLevelName.text);
         }
 
 
@@ -69,15 +70,15 @@ public class LoadSaveLevelData : MonoBehaviour
             if (Physics.Raycast(Camera.main.ScreenPointToRay(Input.mousePosition), out rayhit))
             {
                 #region object movement, scaling, rotation
-                if (rayhit.transform.tag == "Pickup"|| rayhit.transform.tag == "Boulder")
+                if (rayhit.transform.tag == "Pickup" || rayhit.transform.tag == "Boulder")
                 {
                     print("Hitting object");
                     simpleMove = rayhit.transform.gameObject.GetComponent<SimpleMover>() as SimpleMover;
-                    
+
                     camMove.enabled = false;
                     simpleMove.enabled = true;
                 }
-                if(rayhit.transform.tag == "Obstacle")
+                if (rayhit.transform.tag == "Obstacle")
                 {
                     simpleMove = rayhit.transform.gameObject.GetComponent<SimpleMover>() as SimpleMover;
 
@@ -93,7 +94,7 @@ public class LoadSaveLevelData : MonoBehaviour
             }
         }
     }
-    
+
 
     public void SaveLevel(string levelName)
     {
@@ -192,6 +193,7 @@ public class LevelData
     public static LevelData LoadFromFile(string fileName)
     {
         string newPath = System.IO.Path.Combine(saveDirectory, fileName);
+
         return JsonUtility.FromJson<LevelData>(System.IO.File.ReadAllText(newPath));
     }//end loadfromfile
 
@@ -199,8 +201,40 @@ public class LevelData
     {
         string newPath = System.IO.Path.Combine(saveDirectory, fileName);
         System.IO.File.WriteAllText(newPath, JsonUtility.ToJson(this, true));
-       
-        
     }//end savetofile
+
     #endregion
 }
+
+public class SaveManager
+{
+    private LevelData dataToSave;
+    string savePath;
+
+    public SaveManager()
+    {
+        this.savePath = Application.persistentDataPath + "/save.dat";
+        this.dataToSave = new LevelData();
+        this.loadDataFromDisk();
+    }
+
+    public void saveDataToDisk()
+    {
+        BinaryFormatter bf = new BinaryFormatter();
+        FileStream file = File.Create(savePath);
+        bf.Serialize(file, dataToSave);
+        file.Close();
+    }
+
+    public void loadDataFromDisk()
+    {
+        if (File.Exists(savePath))
+        {
+            BinaryFormatter bf = new BinaryFormatter();
+            FileStream file = File.Open(savePath, FileMode.Open);
+            this.dataToSave = (LevelData)bf.Deserialize(file);
+            file.Close();
+        }
+    }
+}
+
